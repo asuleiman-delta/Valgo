@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+<style>
+  @font-face { font-family:'TWK Lausanne'; src:url('https://cdn.prod.website-files.com/69bd9a3628f03d7aa1b12d3f/69d7ec7118087e70ae3da530_TWKLausanne-400.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+  body { margin:0; font-family:Inter, system-ui, sans-serif; background:#0D1017; color:#fff; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4 { font-family:'Oswald', Inter, system-ui, sans-serif; font-weight:600; margin:0; letter-spacing:.02em; text-transform:uppercase; }
+  @keyframes valgoPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  @keyframes valgoSpin { to { transform:rotate(360deg) } }
+  @keyframes valgoFade { from{opacity:0} to{opacity:1} }
+  @keyframes valgoModalIn { from{opacity:0; transform:translateY(24px) scale(.97)} to{opacity:1; transform:translateY(0) scale(1)} }
+  .hero-stats-bar { animation:valgoFloat 5s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){ .hero-stats-bar { animation:none !important; } }
+  @keyframes heroLogoIn { 0%{opacity:0; transform:translateY(-18px) scale(.94)} 60%{opacity:1} 100%{opacity:1; transform:translateY(0) scale(1)} }
+  @keyframes heroFadeIn { from{opacity:0; transform:translateY(-8px)} to{opacity:1; transform:translateY(0)} }
+  @keyframes fogDrift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  @keyframes fogDriftB { 0%{transform:translateX(-6%)} 50%{transform:translateX(6%)} 100%{transform:translateX(-6%)} }
+  @keyframes valgoFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+  @keyframes valgoRailLight { 0%{ left:-140px } 100%{ left:100% } }
+  input::placeholder { color:#9aa3b2; }
+  .hdr-link { border-bottom:2px solid rgba(20,28,48,.22) !important; transition:color .2s ease, border-color .2s ease !important; }
+  .hdr-link:hover { color:#E87A22 !important; border-bottom-color:#E87A22 !important; }
+  select option { color:#0B1E3D; background:#fff; }
+  .vh-form label, .vh-form input, .vh-form select { min-width:0; max-width:100%; box-sizing:border-box; }
+  input:focus, select:focus { border-color:#E87A22 !important; box-shadow:0 0 0 3px rgba(232,122,34,.14); }
+  a { text-decoration:none; }
+  html { scroll-behavior:smooth; }
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); will-change:opacity, transform; }
+  .reveal.is-visible { opacity:1; transform:none; }
+  /* ---- Card style (referencia): marco blanco + imagen embebida con sombra difusa ---- */
+  .side-cards > div, .vgrid-4 > div, .ind-card, .ind-exp-grid > div {
+    border:none !important;
+    border-radius:26px !important;
+    background:#FFFFFF !important;
+    box-shadow:0 2px 6px rgba(24,36,66,.03), 0 12px 28px rgba(24,36,66,.05), 0 24px 52px rgba(24,36,66,.045) !important;
+  }
+  /* imagen embebida con margen (marco blanco) + esquinas y sombra difusa debajo */
+  .ind-card { padding:14px !important; overflow:visible !important; }
+  .ind-card .ind-imgwrap { border-radius:18px !important; overflow:hidden !important; box-shadow:0 16px 32px -12px rgba(24,36,66,.45), 0 4px 12px -4px rgba(24,36,66,.25) !important; }
+  .ind-card .ind-body { padding:20px 20px 22px !important; }
+  .ind-exp-grid > div { padding:14px !important; overflow:visible !important; display:flex !important; flex-direction:column !important; }
+  .ind-exp-grid img { border-radius:18px !important; overflow:hidden !important; box-shadow:0 16px 32px -12px rgba(24,36,66,.45), 0 4px 12px -4px rgba(24,36,66,.25) !important; }
+  .side-cards > div:hover, .vgrid-4 > div:hover, .ind-card:hover, .ind-exp-grid > div:hover {
+    box-shadow:0 3px 8px rgba(24,36,66,.04), 0 18px 40px rgba(24,36,66,.08), 0 36px 74px rgba(24,36,66,.06) !important;
+  }
+  .vtl-step { border:1px solid rgba(232,122,34,.4) !important; background:#FFFFFF !important; box-shadow:0 2px 6px rgba(24,36,66,.03), 0 12px 28px rgba(24,36,66,.05), 0 24px 52px rgba(24,36,66,.045) !important; }
+  .vtl-step:hover { background:#FFF7F1 !important; border-color:rgba(232,122,34,.75) !important; box-shadow:0 3px 8px rgba(24,36,66,.04), 0 18px 40px rgba(24,36,66,.08), 0 36px 74px rgba(24,36,66,.06) !important; }
+  .vtl-step > p { background:transparent !important; box-shadow:none !important; }
+  .side-cards { margin-top:150px; }
+  .side-cards > div { animation:valgoFloat 5s ease-in-out infinite; }
+  .side-cards:first-of-type > div:nth-child(1){ animation-delay:0s; }
+  .side-cards:first-of-type > div:nth-child(2){ animation-delay:1.2s; }
+  .side-cards:last-of-type > div:nth-child(1){ animation-delay:.6s; }
+  .side-cards:last-of-type > div:nth-child(2){ animation-delay:1.8s; }
+  @media (prefers-reduced-motion: reduce){ .side-cards > div { animation:none !important; } }
+  .vtl { align-items:stretch !important; }
+  .vtl-rail { overflow:visible; }
+  .vtl-rail::after { content:""; position:absolute; top:-4px; left:var(--railLx, 50%); width:140px; height:11px; border-radius:11px; background:radial-gradient(ellipse at center, rgba(255,201,138,.95) 0%, rgba(232,122,34,.5) 45%, rgba(232,122,34,0) 75%); filter:blur(1px); pointer-events:none; opacity:var(--railOp, 0); transition:opacity .35s ease, left .12s linear; }
+  @media (prefers-reduced-motion: reduce){ .vtl-rail::after { animation:none; opacity:0; } }
+  .vtl-step { position:relative; background:#FFFFFF; border:1px solid rgba(232,122,34,.4); border-radius:20px; padding:44px 18px 24px; box-shadow:0 18px 46px -28px rgba(24,36,66,.3); margin-top:26px; transition:box-shadow .3s ease, transform .3s ease, background .3s ease, border-color .3s ease; height:100%; box-sizing:border-box; }
+  .vtl-step:hover { transform:translateY(-4px); }
+  .vtl-step .vtl-num { position:absolute; top:-26px; left:50%; transform:translateX(-50%); margin:0 !important; z-index:2; }
+  .vtl-step > p { margin-top:12px !important; text-align:center; }
+  @media (max-width:980px){ .side-cards { margin-top:0 !important; } }
+  @media (prefers-reduced-motion: reduce){ .reveal { opacity:1 !important; transform:none !important; transition:none !important; } }
+  @media (max-width:980px){
+    .hero-stats { margin-top:-70px !important; }
+    .hero-stats-bar { grid-template-columns:1fr 1fr !important; gap:0 !important; }
+    .hero-stat:nth-child(2){ border-right:none !important; }
+    .hero-stat:nth-child(1),.hero-stat:nth-child(2){ border-bottom:1px solid rgba(20,28,48,.12); padding-bottom:16px; }
+    .hero-stat:nth-child(3),.hero-stat:nth-child(4){ padding-top:16px; }
+  }
+  @media (max-width:600px){
+    .hero-stats { margin-top:-50px !important; padding-bottom:56px !important; }
+    .hero-stats-bar { grid-template-columns:1fr !important; }
+    .hero-stat { border-right:none !important; border-bottom:1px solid rgba(20,28,48,.12) !important; padding:14px 20px !important; }
+    .hero-stat:last-child { border-bottom:none !important; }
+  }
+  @media (max-width:980px){
+    .hero-overlay { padding:116px 20px 36px !important; }
+    #cotizar.vh-form { padding-left:20px !important; padding-right:20px !important; }
+    .vh-cred { flex-wrap:wrap !important; }
+    .form-row { flex-direction:column !important; align-items:stretch !important; max-width:640px !important; gap:16px !important; }
+    .form-row .vh-form { order:-1 !important; flex:none !important; max-width:none !important; }
+    .side-cards { flex-direction:row !important; flex:none !important; width:auto !important; }
+    .side-cards > div { flex:1 1 0 !important; }
+    .hero-topbar > div { justify-content:center !important; padding:22px 20px 0 !important; }
+    .hero-logo { text-align:center; }
+    .hero-logo > div:nth-child(2) { margin-left:auto !important; margin-right:auto !important; }
+    .hero-wash { background:linear-gradient(180deg, rgba(247,249,251,.82) 0%, rgba(247,249,251,.45) 38%, rgba(247,249,251,.35) 62%, rgba(247,249,251,.72) 100%) !important; }
+    footer { padding-left:40px !important; padding-right:40px !important; }
+    .cta-content { padding:56px 36px !important; }
+    .cta-panel { background:#EDF1F5 !important; }
+    .vh-row { flex-direction:column !important; align-items:stretch !important; gap:0 !important; }
+    .vh-head { position:static !important; max-width:none !important; bottom:auto !important; left:auto !important; margin-bottom:26px; flex:none !important; }
+    .vh-form { position:static !important; flex:none !important; width:auto !important; right:auto !important; top:auto !important; transform:none !important; max-width:460px; }
+    .vh-cred { position:static !important; left:auto !important; right:auto !important; bottom:auto !important; margin-top:26px !important; flex-wrap:wrap; }
+    .vgrid-4 { grid-template-columns:repeat(2,1fr) !important; }
+    .ind-exp-grid { grid-template-columns:repeat(2,1fr) !important; }
+    .vgrid-ind { grid-template-columns:1fr !important; }
+    .ind-feat { grid-row:auto !important; }
+    .vh-h1 { font-size:42px !important; }
+    .foot { flex-direction:column !important; gap:36px !important; }
+    .vtl { grid-template-columns:repeat(3,1fr) !important; gap:38px 26px !important; }
+    .vtl-rail { display:none !important; }
+    .vtl-step { text-align:left !important; }
+    .vtl-num { margin:0 0 16px !important; }
+  }
+  @media (max-width:600px){
+    .explogos { flex-wrap:wrap !important; gap:24px 30px !important; justify-content:center !important; }
+    .explogos > div { flex:0 0 auto !important; }
+    .ind-exp-grid { grid-template-columns:1fr !important; }
+    .vgrid-4 { grid-template-columns:1fr !important; }
+    .vgrid-3 { grid-template-columns:1fr !important; gap:30px !important; }
+    .navlinks { display:none !important; }
+    .sec { padding-left:20px !important; padding-right:20px !important; }
+    .footcols { grid-template-columns:1fr 1fr !important; gap:28px 24px !important; }
+    .vtl { grid-template-columns:1fr !important; gap:30px !important; }
+    .tray-grid { grid-template-columns:1fr !important; gap:32px !important; }
+    .hero-logo { height:80px !important; }
+    .hero-logo img { height:78px !important; }
+    #vnav > div { height:62px !important; padding-left:20px !important; padding-right:20px !important; }
+    #vnav img { height:38px !important; }
+    #vnav button { padding:9px 15px !important; font-size:12.5px !important; }
+    footer { padding-left:20px !important; padding-right:20px !important; }
+    .cta-content { padding:44px 26px !important; }
+    .cta-content h2 { font-size:32px !important; }
+    /* Ajustes generales móvil */
+    .sec { padding-top:60px !important; padding-bottom:60px !important; }
+    section h2 { font-size:30px !important; }
+    section h2 br { display:none !important; }
+    .hero-media { height:780px !important; background:#F7F9FB !important; }
+    #hero-stage .hero-media > img { top:auto !important; bottom:0 !important; height:62% !important; object-position:center 60% !important; -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 15%) !important; mask-image:linear-gradient(to bottom, transparent 0%, #000 15%) !important; }
+    .hero-overlay { padding:116px 22px 0 !important; justify-content:flex-start !important; }
+    .form-row { margin-top:-40px !important; }
+    /* CTA: imagen vertical del equipo en móvil, texto arriba */
+    .cta-panel { min-height:920px !important; align-items:flex-start !important; background:#EDF1F5 !important; }
+    .cta-img-desktop, .cta-grad-desktop { display:none !important; }
+    .cta-img-mobile { display:block !important; }
+    .cta-grad-mobile { display:block !important; }
+    /* Hero: guardia como figura contenida arriba, texto debajo sin solapar */
+    #hero-guard { height:330px !important; width:auto !important; left:50% !important; top:92px !important; bottom:auto !important; }
+    .hero-ov { background:linear-gradient(180deg, rgba(10,13,19,.35) 0%, rgba(10,13,19,.2) 30%, rgba(10,13,19,.78) 56%, rgba(10,13,19,.95) 100%) !important; }
+    .vh-h1 { font-size:38px !important; }
+    /* Cards de industria: imagen arriba + texto en panel sólido */
+    .ind-feat .ind-imgwrap { min-height:210px !important; }
+    .ind-feat .ind-body h3 { font-size:23px !important; }
+  }
+</style>
+</helmet>
+
+<!-- ===== NAVBAR (claro) ===== -->
+<div id="vnav" style="position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid rgba(20,28,48,.1); box-shadow:0 8px 30px -18px rgba(24,36,66,.4); transform:translateY(-110%); opacity:0; pointer-events:none; transition:transform .35s ease, opacity .35s ease">
+  <div style="box-sizing:border-box; max-width:1620px; margin:0 auto; height:92px; padding:0 150px; display:flex; align-items:center; justify-content:space-between">
+    <img src="assets/logo-valgo2.png" alt="Valgo Seguridad" style="height: 56px; width: auto; display: block">
+    <div style="display:flex; align-items:center; gap:32px">
+      <div class="navlinks" style="display:flex; align-items:center; gap:30px">
+        <a href="#industrias" onClick="{{ navClick }}" class="hdr-link" style="font:600 14px Inter; color:#16202F; border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:3px; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Industrias</a>
+        <a href="#eventos-masivos" onClick="{{ navClick }}" class="hdr-link" style="font:600 14px Inter; color:#16202F; border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:3px; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Eventos masivos</a>
+        <a href="#confianza" onClick="{{ navClick }}" class="hdr-link" style="font:600 14px Inter; color:#16202F; border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:3px; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Confianza</a>
+        <a href="#credenciales" onClick="{{ navClick }}" class="hdr-link" style="font:600 14px Inter; color:#16202F; border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:3px; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Trayectoria</a>
+      </div>
+      <button type="button" onClick="{{ scrollToForm }}" style="background:#E87A22; color:#fff; font:600 14px Inter; border:none; border-radius:12px; padding:12px 20px; cursor:pointer; box-shadow:0 8px 20px -8px rgba(232,122,34,.6); transition:transform .2s ease, filter .2s ease" style-hover="transform:translateY(-2px); filter:brightness(1.07)">Contáctanos</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BLOQUE 1 · HERO ===== -->
+<section id="hero-stage" data-screen-label="Hero" style="position:relative; background:#F7F9FB; overflow:hidden">
+  <div id="vnav-sentinel" style="position:absolute; top:0; left:0; width:1px; height:240px; pointer-events:none"></div>
+  <div class="hero-media" style="position:relative; width:100%; height:clamp(740px, 102vh, 1180px); overflow:hidden">
+    <img src="assets/hero-day.png" alt="Equipo de seguridad Valgo en centro logístico" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 50%; z-index: 1">
+    <div style="position:absolute; left:0; top:0; bottom:0; width:6px; display:flex; flex-direction:column; z-index:6; pointer-events:none"><span style="flex:1; background:#0039A6"></span><span style="flex:1; background:#E1E5EB"></span><span style="flex:1; background:#D52B1E"></span></div>
+
+    <div class="hero-topbar" style="position:absolute; left:0; right:0; top:0; z-index:9">
+      <div style="box-sizing:border-box; max-width:1620px; margin:0 auto; padding:30px 150px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:24px">
+        <div class="hero-logo" style="animation:heroLogoIn 1s cubic-bezier(.2,.7,.2,1) both">
+          <img src="./valgologo2-mrtd0mm8-umk3.png" alt="Valgo Seguridad" style="height:130px; width:auto; display:block; filter:drop-shadow(0 6px 16px rgba(24,36,66,.28))">
+        </div>
+        <div class="navlinks" style="display:flex; align-items:center; gap:34px; margin-top:14px">
+          <a href="#industrias" onClick="{{ navClick }}" class="hdr-link" style="font:600 14.5px Inter; color:#16202F; text-shadow:0 1px 4px rgba(255,255,255,.55); border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:2px; animation:heroFadeIn .8s ease .2s both; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Industrias</a>
+          <a href="#eventos-masivos" onClick="{{ navClick }}" class="hdr-link" style="font:600 14.5px Inter; color:#16202F; text-shadow:0 1px 4px rgba(255,255,255,.55); border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:2px; animation:heroFadeIn .8s ease .25s both; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Eventos masivos</a>
+          <a href="#confianza" onClick="{{ navClick }}" class="hdr-link" style="font:600 14.5px Inter; color:#16202F; text-shadow:0 1px 4px rgba(255,255,255,.55); border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:2px; animation:heroFadeIn .8s ease .35s both; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Confianza</a>
+          <a href="#credenciales" onClick="{{ navClick }}" class="hdr-link" style="font:600 14.5px Inter; color:#16202F; text-shadow:0 1px 4px rgba(255,255,255,.55); border-bottom:2px solid rgba(20,28,48,.2); padding-bottom:2px; animation:heroFadeIn .8s ease .45s both; transition:color .2s ease, border-color .2s ease" style-hover="color:#E87A22; border-color:#E87A22">Trayectoria</a>
+          <button type="button" onClick="{{ scrollToForm }}" style="background:#E87A22; color:#fff; font:600 13.5px Inter; border:none; border-radius:11px; padding:11px 20px; cursor:pointer; white-space:nowrap; animation:heroFadeIn .8s ease .55s both; box-shadow:0 8px 20px -8px rgba(232,122,34,.6); transition:transform .2s ease, filter .2s ease" style-hover="transform:translateY(-2px); filter:brightness(1.07)">Contáctanos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-overlay" style="position:absolute; left:0; right:0; top:0; z-index:5; box-sizing:border-box; padding:132px 40px 40px; display:flex; flex-direction:column; align-items:center; text-align:center">
+      <div style="display:inline-flex; align-items:center; gap:9px; background:rgba(232,122,34,.16); border:1px solid rgba(232,122,34,.45); border-radius:30px; padding:7px 14px; margin-bottom:22px"><span style="width:7px; height:7px; border-radius:50%; background:#E87A22"></span><span style="font:600 12.5px Inter; letter-spacing:.02em; color:#A85A10">Respaldo normativo · Operación bajo control</span></div>
+      <h1 class="vh-h1" style="font-size:48px; line-height:1.05; color:#16202F; max-width:780px; text-wrap:balance; text-shadow:0 2px 22px rgba(247,249,251,.6)">Protección para<br><span style="color: rgb(232, 122, 34);">TU EMPRESA</span></h1>
+      <p style="font:500 16.5px/1.65 Inter; color:#1B2432; margin:20px auto 0; max-width:560px; text-shadow:0 1px 16px rgba(247,249,251,.75)">Seguridad privada con personal certificado OS-10 y cumplimiento de la nueva Ley de Seguridad.</p>
+    </div>
+  </div>
+
+  <div class="hero-stats" style="position:relative; z-index:8; max-width:1300px; margin:-55px auto 0; padding:0 24px 84px; box-sizing:border-box">
+    <div class="hero-stats-bar" style="display:grid; grid-template-columns:repeat(4,1fr); align-items:center; gap:0; background:rgba(255,255,255,.68); backdrop-filter:blur(24px) saturate(1.4); -webkit-backdrop-filter:blur(24px) saturate(1.4); border:1px solid rgba(255,255,255,.65); border-radius:22px; padding:22px 8px; box-shadow:0 26px 60px -30px rgba(24,36,66,.5)">
+      <div class="hero-stat" style="display:flex; align-items:center; gap:15px; padding:6px 26px; min-width:0; border-right:1px solid rgba(20,28,48,.12)">
+        <div style="flex:0 0 auto; width:44px; height:44px; border-radius:13px; background:rgba(232,122,34,.16); display:flex; align-items:center; justify-content:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5v5.7c0 4.4-3 7.5-7 9.3-4-1.8-7-4.9-7-9.3V5.5L12 3z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M8.6 12l2.3 2.3 4.6-4.8" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="min-width:0"><div style="font:700 22px/1 'Oswald',Inter,sans-serif; color:#16202F; letter-spacing:.01em">OS-10</div><div style="font:400 12.5px/1.35 Inter; color:rgba(28,36,54,.66); margin-top:6px">Personal certificado</div></div>
+      </div>
+      <div class="hero-stat" style="display:flex; align-items:center; gap:15px; padding:6px 26px; min-width:0; border-right:1px solid rgba(20,28,48,.12)">
+        <div style="flex:0 0 auto; width:44px; height:44px; border-radius:13px; background:rgba(232,122,34,.16); display:flex; align-items:center; justify-content:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="#D2701A" stroke-width="1.7"></circle><path d="M12 7.6V12l3 1.8" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="min-width:0"><div style="font:700 22px/1 'Oswald',Inter,sans-serif; color:#16202F; letter-spacing:.01em">+15 años</div><div style="font:400 12.5px/1.35 Inter; color:rgba(28,36,54,.66); margin-top:6px">Experiencia operativa</div></div>
+      </div>
+      <div class="hero-stat" style="display:flex; align-items:center; gap:15px; padding:6px 26px; min-width:0; border-right:1px solid rgba(20,28,48,.12)">
+        <div style="flex:0 0 auto; width:44px; height:44px; border-radius:13px; background:rgba(232,122,34,.16); display:flex; align-items:center; justify-content:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M7 3.5h6.5L18 8v12.5H7z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M13 3.5V8h5" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M9.3 14l1.8 1.8 3.4-3.6" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="min-width:0"><div style="font:700 22px/1 'Oswald',Inter,sans-serif; color:#16202F; letter-spacing:.01em">100% legal</div><div style="font:400 12.5px/1.35 Inter; color:rgba(28,36,54,.66); margin-top:6px">Personal contratado formalmente</div></div>
+      </div>
+      <div class="hero-stat" style="display:flex; align-items:center; gap:15px; padding:6px 26px; min-width:0">
+        <div style="flex:0 0 auto; width:44px; height:44px; border-radius:13px; background:rgba(232,122,34,.16); display:flex; align-items:center; justify-content:center"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-5 6.5-10.3A6.5 6.5 0 0012 4a6.5 6.5 0 00-6.5 6.7C5.5 16 12 21 12 21z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><circle cx="12" cy="10.3" r="2.4" stroke="#D2701A" stroke-width="1.7"></circle></svg></div>
+        <div style="min-width:0"><div style="font:700 22px/1 'Oswald',Inter,sans-serif; color:#16202F; letter-spacing:.01em">Regiones</div><div style="font:400 12.5px/1.35 Inter; color:rgba(28,36,54,.66); margin-top:6px">RM y Valparaíso · Próximamente más regiones</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 1.5 · NUESTRA TRAYECTORIA / EVENTOS MASIVOS ===== -->
+<section id="eventos-masivos" class="sec" data-screen-label="Trayectoria" style="position:relative; background:#F7F9FB; padding:104px 150px; overflow:hidden">
+  <div style="position:absolute; right:-120px; top:-80px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(232,122,34,.1), transparent 68%); pointer-events:none; z-index:0"></div>
+  <div class="tray-grid" style="position:relative; z-index:1; max-width:1620px; margin:0 auto; display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center">
+    <div>
+      <div class="reveal" style="font:500 18px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#C96A15; margin-bottom:16px">Nuestra trayectoria</div>
+      <h2 class="reveal" style="font-size:42px; line-height:1.1; color:#16202F; text-wrap:balance">Forjamos nuestra experiencia en los eventos masivos</h2>
+      <p class="reveal" style="font:400 17px/1.75 Inter; color:rgba(28,36,54,.64); margin:22px 0 0; max-width:560px">Hoy, ese mismo liderazgo y capacidad operativa respaldan nuestra línea de seguridad privada para la industria.</p>
+      <p class="reveal" style="font:400 17px/1.75 Inter; color:rgba(28,36,54,.64); margin:18px 0 0; max-width:560px">Esa experiencia en eventos masivos es la base con la que dimos el salto a la industria: plantas, bodegas, logística y minería, con el mismo rigor y capacidad de coordinación a gran escala.</p>
+      <div class="reveal" style="margin-top:34px">
+        <div style="font:500 11.5px/1 Inter; letter-spacing:.06em; text-transform:uppercase; color:rgba(28,36,54,.5); margin-bottom:16px">Clientes en eventos masivos</div>
+        <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; max-width:560px">
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-movistar-arena.webp" alt="Movistar Arena" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-dg.png" alt="DG Medios" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-bizarro.png" alt="Bizarro Live Entertainment" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-fenix.png" alt="Fenix" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-lottus.png" alt="Lotus" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-swing.png" alt="Swing Booking &amp; Management" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-ue.png" alt="Unión Española" style="max-width:100%; max-height:38px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-iguana.png" alt="Iguana Producciones" style="max-width:100%; max-height:34px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-laoreja.png" alt="La Oreja" style="max-width:100%; max-height:38px; object-fit:contain"></div>
+          <div style="display:flex; align-items:center; justify-content:center; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:12px; padding:14px 12px; box-shadow:0 10px 26px -18px rgba(24,36,66,.35)"><img src="assets/cliente-fanlab.png" alt="Fanlab" style="max-width:100%; max-height:38px; object-fit:contain"></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="position:relative; align-self:stretch; min-height:440px; display:flex; flex-direction:column; gap:16px; justify-content:center">
+      <img src="assets/trayectoria-1.jpg" alt="Equipo Valgo en operativo de eventos masivos" style="width:100%; height:230px; object-fit:cover; border-radius:20px; box-shadow:0 24px 50px -26px rgba(24,36,66,.45)">
+      <img src="assets/trayectoria-2.jpg" alt="Control de acceso Valgo en eventos masivos" style="width:100%; height:230px; object-fit:cover; border-radius:20px; box-shadow:0 24px 50px -26px rgba(24,36,66,.45)">
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 2 · PILARES ===== -->
+<section id="confianza" class="sec" style="background:#FFFFFF; padding:104px 150px">
+  <div style="max-width:1620px; margin:0 auto">
+    <div class="reveal" style="margin-bottom:52px; max-width:740px">
+      <div style="font:500 18px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#C96A15; margin-bottom:16px">Respaldo institucional</div>
+      <h2 style="font-size:42px; line-height:1.12; color:#16202F">Regulación, Marco Legal<br>y Fiscalización.</h2>
+      <p style="font:400 17px/1.7 Inter; color:rgba(28,36,54,.64); margin:16px 0 0">Cuatro pilares que validan a Valgo frente a los grandes operadores y protegen legalmente a tu empresa como contratante.</p>
+    </div>
+    <div class="vgrid-4" style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px">
+      <div class="reveal" style="background:#FFFFFF; backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1px solid rgba(20,28,48,.1); border-radius:24px; padding:30px 26px; box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div style="width:50px; height:50px; border-radius:14px; background:rgba(232,140,60,.16); display:flex; align-items:center; justify-content:center; margin-bottom:22px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5v5.7c0 4.4-3 7.5-7 9.3-4-1.8-7-4.9-7-9.3V5.5L12 3z" stroke="#D2701A" stroke-width="1.6" stroke-linejoin="round"></path><path d="M8.6 12l2.3 2.3 4.6-4.8" stroke="#D2701A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <h3 style="font-size:19px; line-height:1.3; font-weight:500; color:#16202F; margin:0 0 10px">Cumplimiento Ley 21.625 y OS-10</h3>
+        <p style="font:400 14.5px/1.65 Inter; color:rgba(28,36,54,.64); margin:0">Operamos bajo la nueva Ley de Seguridad Privada y la normativa OS-10 de Carabineros. Personal certificado, procesos auditables y contratos que cumplen con toda la exigencia legal vigente.</p>
+      </div>
+      <div class="reveal" style="background:#FFFFFF; backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1px solid rgba(20,28,48,.1); border-radius:24px; padding:30px 26px; box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div style="width:50px; height:50px; border-radius:14px; background:rgba(224,82,74,.16); display:flex; align-items:center; justify-content:center; margin-bottom:22px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2.2" stroke="#E0524A" stroke-width="1.6"></rect><path d="M8.5 12l2.2 2.2 4.3-4.4" stroke="#E0524A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.5 7.2h7" stroke="#E0524A" stroke-width="1.6" stroke-linecap="round"></path></svg></div>
+        <h3 style="font-size:19px; line-height:1.3; font-weight:500; color:#16202F; margin:0 0 10px">Capital humano especializado</h3>
+        <p style="font:400 14.5px/1.65 Inter; color:rgba(28,36,54,.64); margin:0">Guardias seleccionados y asignados según el tipo de industria. Perfiles distintos para industria pesada, bodegas, logística, minería y otras industrias.</p>
+      </div>
+      <div class="reveal" style="background:#FFFFFF; backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1px solid rgba(20,28,48,.1); border-radius:24px; padding:30px 26px; box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div style="width:50px; height:50px; border-radius:14px; background:rgba(232,140,60,.16); display:flex; align-items:center; justify-content:center; margin-bottom:22px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-5 6.5-10.3A6.5 6.5 0 0012 4a6.5 6.5 0 00-6.5 6.7C5.5 16 12 21 12 21z" stroke="#D2701A" stroke-width="1.6" stroke-linejoin="round"></path><circle cx="12" cy="10.3" r="2.4" stroke="#D2701A" stroke-width="1.6"></circle></svg></div>
+        <h3 style="font-size:19px; line-height:1.3; font-weight:500; color:#16202F; margin:0 0 10px">Tecnología y comunicaciones</h3>
+        <p style="font:400 14.5px/1.65 Inter; color:rgba(28,36,54,.64); margin:0">Integramos tecnología de monitoreo y sistemas de comunicación en terreno, permitiendo trazabilidad, respuesta rápida y control en tiempo real de cada punto de servicio.</p>
+      </div>
+      <div class="reveal" style="background:#FFFFFF; backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1px solid rgba(20,28,48,.1); border-radius:24px; padding:30px 26px; box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div style="width:50px; height:50px; border-radius:14px; background:rgba(224,82,74,.16); display:flex; align-items:center; justify-content:center; margin-bottom:22px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3.5l2.5 5.3 5.8.6-4.3 3.9 1.2 5.7L12 16.9l-5.2 3.1 1.2-5.7-4.3-3.9 5.8-.6L12 3.5z" stroke="#E0524A" stroke-width="1.5" stroke-linejoin="round"></path></svg></div>
+        <h3 style="font-size:19px; line-height:1.3; font-weight:500; color:#16202F; margin:0 0 10px">Responsabilidad y control</h3>
+        <p style="font:400 14.5px/1.65 Inter; color:rgba(28,36,54,.64); margin:0">Supervisión constante de nuestros equipos en terreno, con KPIs a definir en conjunto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 3 · INDUSTRIAS ===== -->
+<section id="industrias" class="sec" style="background:#F4F6F8; padding:104px 150px">
+  <div style="max-width:1620px; margin:0 auto">
+    <div class="reveal" style="margin-bottom:50px; max-width:740px">
+      <div style="font:500 18px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#C96A15; margin-bottom:16px">Soluciones por industria</div>
+      <h2 style="font-size:42px; line-height:1.12; color:#16202F">Un modelo de seguridad<br>para cada operación.</h2>
+      <p style="font:400 17px/1.7 Inter; color:rgba(28,36,54,.64); margin:16px 0 0">Dotaciones, perfiles y protocolos adaptados al riesgo real de cada entorno.</p>
+    </div>
+    <div class="vgrid-ind" style="display:grid; grid-template-columns:1.5fr 1fr; grid-template-rows:auto auto; gap:24px">
+      <div class="ind-card ind-feat reveal" style="grid-row:1/3; display:flex; flex-direction:column; border-radius:28px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div class="ind-imgwrap" style="position:relative; flex:1 1 auto; min-height:300px; overflow:hidden">
+          <img src="assets/ind-plantas.png" alt="Guardia Valgo en planta industrial" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease" style-hover="transform:scale(1.06)">
+        </div>
+        <div class="ind-body" style="padding:32px 34px 34px; background:#FFFFFF">
+          <h3 style="font-size:26px; line-height:1.16; font-weight:600; color:#16202F; margin:0 0 12px">Plantas industriales, bodegas y logística</h3>
+          <p style="font:400 15px/1.65 Inter; color:rgba(28,36,54,.66); margin:0 0 22px; max-width:520px">Ideal para operadores logísticos y plantas que requieren dotaciones grandes, contratos estables y cumplimiento normativo total. Control de acceso industrial y supervisión permanente.</p>
+          <button type="button" onClick="{{ scrollToForm }}" style="background:#E87A22; color:#fff; font:600 14px Inter; border:none; border-radius:12px; padding:13px 20px; cursor:pointer; box-shadow:0 10px 22px -10px rgba(232,122,34,.6); transition:transform .2s ease, filter .2s ease" style-hover="transform:translateY(-2px); filter:brightness(1.07)">Contáctanos →</button>
+        </div>
+      </div>
+      <div class="ind-card reveal" style="display:flex; flex-direction:column; border-radius:28px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div class="ind-imgwrap" style="position:relative; height:180px; flex:0 0 auto; overflow:hidden">
+          <img src="./magnific_quita-las-armas-del-guard_vudlk-mr5e6xna.png" alt="Guardia Valgo en edificio corporativo / hotel" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease" style-hover="transform:scale(1.06)">
+        </div>
+        <div class="ind-body" style="padding:24px 26px 26px; background:#FFFFFF">
+          <h3 style="font-size:20px; line-height:1.22; font-weight:600; color:#16202F; margin:0 0 9px">Hoteles y edificios corporativos</h3>
+          <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.64); margin:0 0 16px">Perfil de guardia anfitrión con características de seguridad, con un estilo de atención acorde al ambiente corporativo o turístico.</p>
+          <button type="button" onClick="{{ scrollToForm }}" style="background:transparent; color:#C96A15; font:600 13.5px Inter; border:none; padding:0; cursor:pointer; transition:opacity .2s ease, transform .2s ease" style-hover="opacity:.78; transform:translateX(3px)">Contáctanos →</button>
+        </div>
+      </div>
+      <div class="ind-card reveal" style="display:flex; flex-direction:column; border-radius:28px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2); transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease" style-hover="transform:translateY(-6px); border-color:rgba(24,36,66,.22); box-shadow:0 30px 70px -30px rgba(24,36,66,.3)">
+        <div class="ind-imgwrap" style="position:relative; height:180px; flex:0 0 auto; overflow:hidden">
+          <img src="assets/ind-colegio.png" alt="Guardia Valgo en recinto educacional" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease" style-hover="transform:scale(1.06)">
+        </div>
+        <div class="ind-body" style="padding:24px 26px 26px; background:#FFFFFF">
+          <h3 style="font-size:20px; line-height:1.22; font-weight:600; color:#16202F; margin:0 0 9px">Colegios y universidades</h3>
+          <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.64); margin:0 0 16px">Perfil de guardia versátil, control de acceso y supervisión adaptada al entorno educacional.</p>
+          <button type="button" onClick="{{ scrollToForm }}" style="background:transparent; color:#C96A15; font:600 13.5px Inter; border:none; padding:0; cursor:pointer; transition:opacity .2s ease, transform .2s ease" style-hover="opacity:.78; transform:translateX(3px)">Contáctanos →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 3.5 · PROCESO / LÍNEA DE TIEMPO ===== -->
+<section id="proceso" class="sec" style="background: #FFFFFF; padding: 104px 150px; padding-bottom: 104px">
+  <div style="max-width:1620px; margin:0 auto">
+    <div class="reveal" style="margin-bottom:60px; max-width:760px">
+      <div style="font:500 18px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#C96A15; margin-bottom:16px">¿Cómo operamos?</div>
+      <h2 style="font-size:42px; line-height:1.12; color:#16202F">De la solicitud<br>a la implementación.</h2>
+      <p style="font:400 17px/1.7 Inter; color:rgba(28,36,54,.64); margin:16px 0 0">Un proceso claro y trazable en seis etapas, desde el primer<br>contacto hasta la puesta en marcha del servicio.</p>
+    </div>
+    <div class="vtl" style="position:relative; display:grid; grid-template-columns:repeat(6,1fr); gap:26px">
+      <div class="vtl-rail" style="position: absolute; top: 20px; left: 8.333%; right: 8.333%; height: 3px; border-radius: 3px; background: linear-gradient(90deg, rgba(232,122,34,.55), #E87A22); z-index: 0"></div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">1</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Recepción de solicitud</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">Recibimos el requerimiento del cliente y damos inicio al proceso de evaluación.</p>
+      </div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">2</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Revisión y factibilidad</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">Analizamos la solicitud para determinar la factibilidad técnica y operativa de la implementación.</p>
+      </div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">3</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Levantamiento y cotización</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">Un ejecutivo de servicio Valgo contacta al cliente, agenda una visita técnica y realiza el levantamiento necesario para elaborar la propuesta comercial.</p>
+      </div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">4</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Entrega de propuesta</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">Presentamos al cliente la propuesta comercial con el detalle del servicio y las condiciones.</p>
+      </div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">5</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Aprobación del cliente</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">El cliente revisa y aprueba la propuesta comercial.</p>
+      </div>
+      <div class="vtl-step reveal" style="position:relative; z-index:1; text-align:center">
+        <div class="vtl-num" style="width:52px; height:52px; border-radius:50%; background:#E87A22; color:#fff; font:600 20px/1 'Oswald',Inter,sans-serif; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(232,122,34,.55); margin:0 auto 22px">6</div>
+        <h3 style="font-size:16px; line-height:1.28; font-weight:600; color:#16202F; margin:0 0 9px">Planificación de implementación</h3>
+        <p style="font:400 13.5px/1.6 Inter; color:rgba(28,36,54,.62); margin:0">Valgo entrega una carta Gantt con los tiempos y etapas de implementación del servicio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 4 · CREDENCIALES ===== -->
+<section id="credenciales" class="sec" style="background:#F4F6F8; padding:104px 150px">
+  <div style="max-width:1620px; margin:0 auto">
+    <!-- Experiencia por industrias -->
+    <div class="reveal" style="text-align:center">
+      <div style="font:500 18px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#C96A15; margin-bottom:16px">Trayectoria del equipo</div>
+      <h3 style="font:600 32px/1.16 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center; max-width:840px; margin:0 auto 42px">Experiencia del equipo directivo en las siguientes industrias</h3>
+      <div class="ind-exp-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px">
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-logistica.png" alt="Logística y transporte" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Logística y transporte</div>
+        </div>
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-pesada.png" alt="Industria pesada" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Industria pesada</div>
+        </div>
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-salud.png" alt="Salud" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Salud</div>
+        </div>
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-deportivos.jpg" alt="Centros deportivos" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Centros deportivos</div>
+        </div>
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-mineria.png" alt="Minería" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Minería</div>
+        </div>
+        <div style="border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(20,28,48,.1); box-shadow:0 16px 44px -26px rgba(24,36,66,.2)">
+          <img src="assets/exp-otras.png" alt="Otras industrias" style="display:block; width:100%; height:210px; object-fit:cover">
+          <div style="padding:18px 20px; font:600 18px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Otras industrias</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOQUE 5 · CTA FINAL ===== -->
+<section class="sec" style="background:#F7F9FB; padding:40px 150px 110px">
+  <div class="cta-panel" style="max-width:1620px; margin:0 auto; position:relative; border-radius:32px; overflow:hidden; border:1px solid rgba(20,28,48,.1); min-height:440px; display:flex; align-items:center; background:#EDF1F5">
+    <img class="cta-img-desktop" src="assets/cta-desktop.png" alt="Equipo de seguridad Valgo" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:right center; z-index:1">
+    <img class="cta-img-mobile" src="assets/cta-mobile.png" alt="Equipo de seguridad Valgo" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center bottom; z-index:1">
+    <div class="cta-grad-desktop" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(247,249,251,.96) 0%, rgba(247,249,251,.85) 36%, rgba(247,249,251,.4) 62%, rgba(247,249,251,.08) 100%); z-index: 2; pointer-events: none; display: none"></div>
+    <div class="cta-grad-mobile" style="display:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(247,249,251,.88) 0%, rgba(247,249,251,.55) 28%, rgba(247,249,251,.15) 52%, rgba(247,249,251,.05) 100%); z-index:2; pointer-events:none"></div>
+    <div style="position:absolute; left:0; top:0; bottom:0; width:5px; display:flex; flex-direction:column; z-index:3"><span style="flex:1; background:#0039A6"></span><span style="flex:1; background:#fff"></span><span style="flex:1; background:#D52B1E"></span></div>
+    <div class="reveal cta-content" style="position:relative; z-index:4; max-width:600px; padding:72px 56px">
+      <h2 style="font-size:44px; line-height:1.1; color:#16202F">¿Necesitas seguridad para tu empresa? Conversemos.</h2>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:36px">
+        <button type="button" onClick="{{ scrollToForm }}" style="background:#E87A22; color:#fff; font:600 15px Inter; border:none; border-radius:13px; padding:17px 32px; cursor:pointer; box-shadow:0 14px 30px -12px rgba(232,122,34,.8); transition:transform .2s ease, filter .2s ease, box-shadow .2s ease" style-hover="transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 20px 40px -12px rgba(232,122,34,.9)">Contáctanos</button>
+      </div>
+      <div style="display:flex; gap:14px 26px; flex-wrap:wrap; margin-top:34px; padding:22px 26px; border-radius:18px; background:#FFFFFF; box-shadow:0 18px 46px -24px rgba(24,36,66,.4); border:1px solid rgba(20,28,48,.1)">
+        <div style="display:flex; align-items:center; gap:11px">
+          <div style="flex:0 0 auto; width:36px; height:36px; border-radius:11px; background:rgba(232,122,34,.14); display:flex; align-items:center; justify-content:center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5v5.7c0 4.4-3 7.5-7 9.3-4-1.8-7-4.9-7-9.3V5.5L12 3z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M8.6 12l2.3 2.3 4.6-4.8" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="font:600 15px/1 'Oswald',Inter,sans-serif; letter-spacing:.02em; color:#16202F">OS-10</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:11px">
+          <div style="flex:0 0 auto; width:36px; height:36px; border-radius:11px; background:rgba(232,122,34,.14); display:flex; align-items:center; justify-content:center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="#D2701A" stroke-width="1.7"></circle><path d="M12 7.6V12l3 1.8" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="font:600 15px/1 'Oswald',Inter,sans-serif; letter-spacing:.02em; color:#16202F">+15 años</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:11px">
+          <div style="flex:0 0 auto; width:36px; height:36px; border-radius:11px; background:rgba(232,122,34,.14); display:flex; align-items:center; justify-content:center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M7 3.5h6.5L18 8v12.5H7z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M13 3.5V8h5" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><path d="M9.3 14l1.8 1.8 3.4-3.6" stroke="#D2701A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="font:600 15px/1 'Oswald',Inter,sans-serif; letter-spacing:.02em; color:#16202F">100% legal</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:11px">
+          <div style="flex:0 0 auto; width:36px; height:36px; border-radius:11px; background:rgba(232,122,34,.14); display:flex; align-items:center; justify-content:center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 21s6.5-5 6.5-10.3A6.5 6.5 0 0012 4a6.5 6.5 0 00-6.5 6.7C5.5 16 12 21 12 21z" stroke="#D2701A" stroke-width="1.7" stroke-linejoin="round"></path><circle cx="12" cy="10.3" r="2.4" stroke="#D2701A" stroke-width="1.7"></circle></svg></div>
+          <div style="font:600 15px/1 'Oswald',Inter,sans-serif; letter-spacing:.02em; color:#16202F">Regiones</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER (claro, multi-columna) ===== -->
+<footer style="position:relative; background:#0D1017; padding:56px 150px 40px; border-top:1px solid rgba(255,255,255,.08)">
+  <div style="position:absolute; top:0; left:0; right:0; height:5px; display:flex; z-index:2"><span style="flex:1; background:#0039A6"></span><span style="flex:1; background:#fff"></span><span style="flex:1; background:#D52B1E"></span></div>
+  <div class="foot" style="max-width:1620px; margin:0 auto; display:flex; justify-content:space-between; gap:48px">
+    <div style="max-width:300px">
+      <img src="assets/shield.png" alt="Valgo Seguridad" style="height:84px; width:auto; display:block; margin-bottom:18px">
+      <p style="font:400 14px/1.65 Inter; color:rgba(255,255,255,.6); margin:0">Seguridad industrial B2B con respaldo normativo. Personal certificado OS-10 y cobertura nacional.</p>
+    </div>
+    <div class="footcols" style="display:grid; grid-template-columns:repeat(3,auto); gap:56px">
+      <div>
+        <div style="font:600 12px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#fff; margin-bottom:16px">Soluciones</div>
+        <div style="display:flex; flex-direction:column; gap:11px">
+          <a href="#industrias" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Plantas y bodegas</a>
+          <a href="#industrias" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Edificios y hoteles</a>
+          <a href="#industrias" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Colegios y universidades</a>
+          <a href="#industrias" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Condominios</a>
+          <a href="#industrias" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Control de acceso</a>
+        </div>
+      </div>
+      <div>
+        <div style="font:600 12px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#fff; margin-bottom:16px">Empresa</div>
+        <div style="display:flex; flex-direction:column; gap:11px">
+          <a href="#confianza" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Confianza normativa</a>
+          <a href="#credenciales" onClick="{{ navClick }}" style="font:400 14px Inter; color:rgba(255,255,255,.6)">Trayectoria</a>
+          <button type="button" onClick="{{ scrollToForm }}" style="font:400 14px Inter; color:rgba(255,255,255,.6); background:none; border:none; padding:0; text-align:left; cursor:pointer">Contáctanos</button>
+        </div>
+      </div>
+      <div>
+        <div style="font:600 12px/1 Inter; letter-spacing:.04em; text-transform:uppercase; color:#fff; margin-bottom:16px">Contacto</div>
+        <div style="display:flex; flex-direction:column; gap:11px; align-items:flex-start">
+          <button type="button" onClick="{{ scrollToForm }}" style="font:400 14px Inter; color:rgba(255,255,255,.6); background:none; border:none; padding:0; text-align:left; cursor:pointer">Solicitar presupuesto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1620px; margin:36px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <div style="font:400 12.5px Inter; color:rgba(255,255,255,.45)">Valgo Seguridad · Seguridad Industrial B2B · OS-10 · Cobertura Nacional</div>
+    <div style="font:400 12.5px Inter; color:rgba(255,255,255,.45)">Sitio desarrollado por Delta Digital · 2026</div>
+  </div>
+</footer>
+
+<!-- ===== MODAL · FORMULARIO CONTÁCTANOS ===== -->
+<sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeFormBackdrop }}" style="position:fixed; inset:0; z-index:200; background:rgba(10,13,19,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); display:flex; align-items:flex-start; justify-content:center; padding:6vh 20px 40px; overflow-y:auto; animation:valgoFade .22s ease both">
+  <div id="cotizar" class="vh-form" style="position:relative; width:100%; max-width:640px; margin:auto; animation:valgoModalIn .32s cubic-bezier(.2,.8,.25,1) both">
+    <button type="button" onClick="{{ closeForm }}" aria-label="Cerrar" style="position:absolute; top:-16px; right:-16px; z-index:3; width:42px; height:42px; border-radius:50%; background:#fff; border:1px solid rgba(20,28,48,.12); box-shadow:0 12px 26px -10px rgba(24,36,66,.5); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .2s ease" style-hover="transform:rotate(90deg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#16202F" stroke-width="2" stroke-linecap="round"></path></svg></button>
+    <sc-if value="{{ notSentHero }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submitHero }}" style="background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:24px; box-shadow:0 40px 90px -30px rgba(0,0,0,.5); padding:34px 32px 32px">
+        <div style="font:600 24px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F; text-align:center">Solicita tu presupuesto</div>
+        <div style="font:400 13.5px/1.5 Inter; color:rgba(28,36,54,.6); margin-top:8px; text-align:center">Te contactamos a la brevedad</div>
+        <div style="height:1px; background:rgba(20,28,48,.1); margin:22px 0"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:13px 14px">
+          <label style="display:block"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Nombre de contacto</span><input required="" type="text" placeholder="Nombre y apellido" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 13px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"></label>
+          <label style="display:block"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Empresa / RUT</span><input required="" type="text" placeholder="Razón social o RUT" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 13px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"></label>
+          <label style="display:block"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Correo corporativo</span><input required="" type="email" placeholder="nombre@empresa.cl" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 13px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"></label>
+          <label style="display:block"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Teléfono / WhatsApp</span><input required="" type="tel" placeholder="+56 9 0000 0000" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 13px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"></label>
+          <label style="display:block; grid-column:1/-1"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Tipo de requerimiento</span><select required="" defaultValue="" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 11px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"><option value="" disabled="">Selecciona una opción</option><option>Guardias para planta industrial o bodega</option><option>Guardias para edificio corporativo u hotel</option><option>Control de acceso</option><option>Colegios y universidades</option><option>Otro (especificar)</option></select></label>
+          <label style="display:block; grid-column:1/-1"><span style="display:block; font:500 11.5px/1 Inter; color:rgba(28,36,54,.68); margin-bottom:8px">Región</span><select required="" defaultValue="" style="width:100%; height:42px; border:1px solid rgba(20,28,48,.16); border-radius:12px; padding:0 11px; font:400 14px Inter; color:#16202F; background:#F4F6F8; outline:none"><option value="" disabled="">Selecciona una región</option><option>Región Metropolitana</option><option>Valparaíso</option></select></label>
+        </div>
+        <button type="submit" style="width:100%; height:52px; background:#E87A22; color:#fff; font:600 15px Inter; border:none; border-radius:12px; cursor:pointer; margin-top:16px; box-shadow:0 12px 24px -10px rgba(232,122,34,.7); transition:transform .2s ease, filter .2s ease, box-shadow .2s ease" style-hover="transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 18px 34px -12px rgba(232,122,34,.85)">Contáctanos</button>
+        <div style="font:400 11.5px/1.45 Inter; color:rgba(28,36,54,.5); text-align:center; margin-top:14px">Tus datos se usan solo para contactarte. No compartimos información.</div>
+      </form>
+    </sc-if>
+    <sc-if value="{{ sendingHero }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#FFFFFF; border:1px solid rgba(20,28,48,.1); border-radius:24px; box-shadow:0 40px 90px -30px rgba(0,0,0,.5); padding:56px 30px; min-height:420px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center">
+        <div style="width:58px; height:58px; margin:0 auto 22px; border-radius:50%; border:4px solid rgba(232,122,34,.18); border-top-color:#E87A22; animation:valgoSpin .8s linear infinite"></div>
+        <div style="font:600 24px/1.2 'Oswald',Inter,sans-serif; text-transform:uppercase; letter-spacing:.02em; color:#16202F">Enviando solicitud…</div>
+        <div style="font:400 15px/1.6 Inter; color:rgba(28,36,54,.66); margin-top:11px">Estamos registrando tus datos. En un momento te confirmamos.</div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ===== BOTÓN FLOTANTE · CONTÁCTANOS ===== -->
+<button type="button" onClick="{{ scrollToForm }}" aria-label="Contáctanos" style="position:fixed; right:24px; bottom:24px; z-index:100; display:inline-flex; align-items:center; gap:10px; background:#E87A22; color:#fff; font:600 15px Inter; border:none; border-radius:40px; padding:16px 24px; cursor:pointer; box-shadow:0 14px 34px -8px rgba(232,122,34,.6); transition:transform .2s ease, filter .2s ease" style-hover="transform:translateY(-3px); filter:brightness(1.06)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5.5A1.5 1.5 0 015.5 4h13A1.5 1.5 0 0120 5.5v9A1.5 1.5 0 0118.5 16H9l-4 3.5V16H5.5A1.5 1.5 0 014 14.5v-9z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"></path></svg>Contáctanos</button>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { heroStatus: 'idle', formOpen: false };
+
+  componentDidMount() {
+    const apply = (show) => {
+      const nav = document.getElementById('vnav');
+      if (!nav) return;
+      nav.style.transform = show ? 'translateY(0)' : 'translateY(-110%)';
+      nav.style.opacity = show ? '1' : '0';
+      nav.style.pointerEvents = show ? 'auto' : 'none';
+    };
+    const sentinel = document.getElementById('vnav-sentinel');
+    if (sentinel && 'IntersectionObserver' in window) {
+      this._io = new IntersectionObserver(([e]) => apply(!e.isIntersecting));
+      this._io.observe(sentinel);
+    }
+    apply(false);
+
+    this._onKey = (ev) => { if (ev.key === 'Escape' && this.state.formOpen) this.setState({ formOpen: false }); };
+    window.addEventListener('keydown', this._onKey);
+
+    // Scroll reveal
+    // Aplicar aparición por sección (tarjetas + encabezados/párrafos) con escalonado
+    const cardSel = '.vgrid-4 > div, .ind-card, .ind-exp-grid > div, .vtl-step, .side-cards > div, .explogos > div, footer .foot > div, footer .footcols > div';
+    const sections = Array.from(document.querySelectorAll('section, footer'));
+    sections.forEach((sec) => {
+      if (sec.closest('.hero-media')) return;
+      const cards = Array.from(sec.querySelectorAll(cardSel));
+      const intros = Array.from(sec.querySelectorAll('h2, h3, p, form, .cta-content'))
+        .filter((el) => !cards.some((c) => c.contains(el)) && !el.closest('.reveal') && !el.closest('#vnav'));
+      let i = 0;
+      intros.concat(cards).forEach((el) => {
+        el.classList.add('reveal');
+        if (!el.style.transitionDelay) el.style.transitionDelay = (Math.min(i, 6) * 0.07) + 's';
+        i++;
+      });
+    });
+    const reveals = Array.from(document.querySelectorAll('.reveal'));
+    if (reveals.length) {
+      if ('IntersectionObserver' in window) {
+        this._revealIo = new IntersectionObserver((entries, obs) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        reveals.forEach((el) => this._revealIo.observe(el));
+        // Safety: revela solo lo que ya está en viewport tras 2.5s (no lo de más abajo, para conservar el efecto al hacer scroll)
+        this._revealSafety = setTimeout(() => reveals.forEach((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight * 0.95) el.classList.add('is-visible');
+        }), 2500);
+      } else {
+        reveals.forEach((el) => el.classList.add('is-visible'));
+      }
+    }
+
+    const stage = document.getElementById('hero-stage');
+    const bg = document.getElementById('hero-bg');
+    const guard = document.getElementById('hero-guard');
+    if (stage && (bg || guard)) {
+      this._onMove = (ev) => {
+        const r = stage.getBoundingClientRect();
+        const dx = (ev.clientX - (r.left + r.width / 2)) / r.width;
+        const dy = (ev.clientY - (r.top + r.height / 2)) / r.height;
+        if (bg) bg.style.transform = 'scale(1.08) translate(' + (dx * -14) + 'px,' + (dy * -10) + 'px)';
+        if (guard) guard.style.transform = 'translateX(-50%) translate(' + (dx * 28) + 'px,' + (dy * 16) + 'px)';
+      };
+      window.addEventListener('pointermove', this._onMove, { passive: true });
+    }
+
+    // Luz de la línea de tiempo que sigue el mouse
+    const rail = document.querySelector('.vtl-rail');
+    const vtl = document.querySelector('.vtl');
+    if (rail && vtl) {
+      this._onRail = (ev) => {
+        const rr = rail.getBoundingClientRect();
+        const vr = vtl.getBoundingClientRect();
+        const near = ev.clientX >= vr.left && ev.clientX <= vr.right && ev.clientY >= vr.top - 60 && ev.clientY <= vr.top + 140;
+        if (near) {
+          const lx = ev.clientX - rr.left - 70;
+          rail.style.setProperty('--railLx', lx + 'px');
+          rail.style.setProperty('--railOp', '1');
+        } else {
+          rail.style.setProperty('--railOp', '0');
+        }
+      };
+      window.addEventListener('pointermove', this._onRail, { passive: true });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    if (this._revealIo) this._revealIo.disconnect();
+    if (this._revealSafety) clearTimeout(this._revealSafety);
+    if (this._onMove) window.removeEventListener('pointermove', this._onMove);
+    if (this._onRail) window.removeEventListener('pointermove', this._onRail);
+    if (this._redirect) clearTimeout(this._redirect);
+    if (this._onKey) window.removeEventListener('keydown', this._onKey);
+  }
+
+  fireConversions() {
+    // === HOOKS DE CONVERSIÓN — reemplazar IDs con los de Bruno (Paid Media) antes del deploy ===
+    try {
+      // Google Ads (gtag) — conversión
+      // if (window.gtag) gtag('event','conversion',{ send_to:'AW-XXXXXXXXX/XXXXXXXXXXX' });
+      // GA4 — generate_lead
+      // if (window.gtag) gtag('event','generate_lead',{ event_category:'formulario', value:1, currency:'CLP' });
+      // LinkedIn Insight Tag — conversión
+      // if (window.lintrk) lintrk('track', { conversion_id: 0000000 });
+      // Google Tag Manager (dataLayer)
+      if (window.dataLayer) window.dataLayer.push({ event: 'formulario_enviado', form: 'cotizacion_valgo' });
+      console.log('[Valgo] Lead capturado → eventos de conversión (stub). Conectar IDs reales antes del deploy.');
+    } catch (err) { console.warn('[Valgo] Error en hook de conversión:', err); }
+  }
+
+  submitHero(e) {
+    e.preventDefault();
+    if (this.state.heroStatus === 'sending') return;
+    this.fireConversions();
+    this.setState({ heroStatus: 'sending' });
+    this._redirect = setTimeout(() => { window.location.href = 'Gracias.dc.html'; }, 1600);
+  }
+
+  openForm() {
+    this.setState({ formOpen: true });
+  }
+
+  closeForm() {
+    this.setState({ formOpen: false });
+  }
+
+  closeFormBackdrop(e) {
+    if (e && e.target === e.currentTarget) this.setState({ formOpen: false });
+  }
+
+  renderVals() {
+    return {
+      notSentHero: this.state.heroStatus === 'idle',
+      sendingHero: this.state.heroStatus === 'sending',
+      formOpen: this.state.formOpen,
+      submitHero: (e) => this.submitHero(e),
+      scrollToForm: () => this.openForm(),
+      navClick: (e) => {
+        const href = e.currentTarget.getAttribute('href') || '';
+        if (!href.startsWith('#')) return;
+        const el = document.getElementById(href.slice(1));
+        if (!el) return;
+        e.preventDefault();
+        const y = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: y < 0 ? 0 : y, behavior: 'smooth' });
+      },
+      closeForm: () => this.closeForm(),
+      closeFormBackdrop: (e) => this.closeFormBackdrop(e),
+    };
+  }
+}
+</script>
+</body>
+</html>

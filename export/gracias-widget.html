@@ -1,0 +1,69 @@
+<!--
+  ============================================================================
+  VALGO SEGURIDAD · Página de GRACIAS · self-contained para widget HTML (Elementor)
+  ----------------------------------------------------------------------------
+  ESTRUCTURA: <style> … </style>  +  <div class="wrapper-principal"> … </div>
+  Sin <html>, <head> ni <body>. Pegar en el widget "HTML" de la página de gracias.
+
+  ANTES DE PUBLICAR:
+  1) IMÁGENES: usa la carpeta relativa "assets/" (misma del widget principal).
+  2) ENLACES "Volver al inicio": apuntan a "/" (home de WP). Cambia si tu landing
+     vive en otra URL.
+  3) WHATSAPP: reemplaza el número 56900000000 por el real.
+  ============================================================================
+-->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap');
+  .wrapper-principal { width:100%; font-family:Inter, system-ui, sans-serif; color:#16202F; -webkit-font-smoothing:antialiased; }
+  .wrapper-principal h1,.wrapper-principal h2,.wrapper-principal h3 { font-family:'Oswald', Inter, system-ui, sans-serif; font-weight:600; margin:0; letter-spacing:.02em; text-transform:uppercase; }
+  .wrapper-principal a { text-decoration:none; }
+  @keyframes gzPop { 0%{opacity:0; transform:scale(.7)} 60%{opacity:1; transform:scale(1.06)} 100%{opacity:1; transform:scale(1)} }
+  @keyframes gzUp { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
+  @keyframes gzCheck { from{stroke-dashoffset:40} to{stroke-dashoffset:0} }
+  .gz-back { transition:color .2s ease; }
+  .gz-back:hover { color:#16202F !important; }
+  .gz-wa { transition:transform .2s ease, filter .2s ease; }
+  .gz-wa:hover { transform:translateY(-2px); filter:brightness(1.05); }
+  .gz-home { transition:transform .2s ease; }
+  .gz-home:hover { transform:translateY(-2px); }
+</style>
+
+<div class="wrapper-principal">
+<div style="min-height:100vh; box-sizing:border-box; display:flex; flex-direction:column; background:radial-gradient(1100px 620px at 50% -10%, rgba(232,122,34,.08), transparent 60%), #F7F9FB">
+
+  <div style="position:fixed; top:0; left:0; right:0; z-index:20; background:rgba(255,255,255,.97); border-bottom:1px solid rgba(20,28,48,.1)">
+    <div style="box-sizing:border-box; max-width:1620px; margin:0 auto; height:80px; padding:0 clamp(20px,6vw,150px); display:flex; align-items:center; justify-content:space-between">
+      <img src="assets/logo-valgo2.png" alt="Valgo Seguridad" style="height:48px; width:auto; display:block">
+      <a href="/" class="gz-back" style="font:600 14px Inter; color:rgba(22,32,47,.72)">Volver al inicio</a>
+    </div>
+  </div>
+
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:120px 24px 80px">
+    <div style="width:100%; max-width:640px; text-align:center">
+
+      <div style="width:104px; height:104px; border-radius:30px; background:rgba(232,122,34,.14); display:flex; align-items:center; justify-content:center; margin:0 auto 34px; animation:gzPop .7s cubic-bezier(.2,.8,.25,1) both; box-shadow:0 24px 50px -24px rgba(47,168,102,.55)">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#D2701A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:40; animation:gzCheck .6s ease .35s both"></path></svg>
+      </div>
+
+      <div style="font:600 13px/1 Inter; letter-spacing:.06em; text-transform:uppercase; color:#C96A15; margin-bottom:18px; animation:gzUp .6s ease .15s both">Solicitud recibida</div>
+
+      <h1 style="font-size:clamp(38px,6vw,56px); line-height:1.02; color:#16202F; animation:gzUp .6s ease .25s both">Gracias por<br><span style="color:#E87A22">confiar en Valgo</span></h1>
+
+      <p style="font:400 18px/1.65 Inter; color:rgba(28,36,54,.66); margin:24px auto 0; max-width:480px; animation:gzUp .6s ease .35s both">Hemos recibido tu solicitud de cotización. Un ejecutivo de Valgo revisará los detalles y te contactará a la brevedad.</p>
+
+      <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:38px; animation:gzUp .6s ease .45s both">
+        <div style="display:flex; align-items:center; gap:9px; font:500 14px Inter; color:rgba(28,36,54,.7)"><span style="width:8px; height:8px; border-radius:50%; background:#E87A22"></span>Personal certificado OS-10</div>
+        <div style="display:flex; align-items:center; gap:9px; font:500 14px Inter; color:rgba(28,36,54,.7)"><span style="width:8px; height:8px; border-radius:50%; background:#E87A22"></span>Cobertura RM y Valparaíso</div>
+      </div>
+
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:44px; animation:gzUp .6s ease .55s both">
+        <a href="/" class="gz-home" style="display:inline-flex; align-items:center; gap:8px; background:#fff; color:#16202F; font:600 15px Inter; border:1px solid rgba(20,28,48,.14); border-radius:13px; padding:15px 26px; box-shadow:0 10px 28px -18px rgba(24,36,66,.4)">Volver al inicio</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="text-align:center; padding:0 24px 40px; font:400 12.5px/1.5 Inter; color:rgba(28,36,54,.45)">Valgo Seguridad · Protección industrial con respaldo legal · Región Metropolitana y Valparaíso</div>
+
+</div>
+</div><!-- /.wrapper-principal -->
